@@ -578,6 +578,8 @@ void Score::doLayout()
       _symIdx = 0;
       if (_style.valueSt(ST_MusicalSymbolFont) == "Gonville")
             _symIdx = 1;
+      if (_style.valueSt(ST_MusicalSymbolFont) == "Parnassus")
+            _symIdx = 2;
 
       initSymbols(_symIdx);
 

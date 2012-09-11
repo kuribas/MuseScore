@@ -18,8 +18,8 @@
 #include "xml.h"
 #include "mscore.h"
 
-QVector<Sym> symbols[2];
-static bool symbolsInitialized[2] = { false, false };
+QVector<Sym> symbols[3];
+static bool symbolsInitialized[3] = { false, false, false };
 
 QMap<const char*, SymCode*> charReplaceMap;
 
@@ -319,8 +319,8 @@ int symIdx2fontId(int symIdx)
 
 QFont fontId2font(int fontId)
       {
-      static QFont* fonts[4];       // cached values
-      Q_ASSERT(fontId >= 0 && fontId < 4);
+      static QFont* fonts[5];       // cached values
+      Q_ASSERT(fontId >= 0 && fontId < 5);
 
       QFont* f = fonts[fontId];
       if (f == 0) {
@@ -341,8 +341,11 @@ QFont fontId2font(int fontId)
                   size = size * MScore::DPI / PPI;
 #endif
                   }
-            else
+            else if (fontId == 3)
                   f->setFamily("Gonville-20");
+            else {
+                  f->setFamily("Parnassus");
+                  }
             f->setStyleStrategy(QFont::NoFontMerging);
 #ifdef USE_GLYPHS
             f->setPointSizeF(size);
@@ -609,7 +612,12 @@ void initSymbols(int idx)
       path = rpath + QString(idx == 0 ? "/mscore20.xml" : "/mscore/gonville.xml");
       }
 #else
-      path = idx == 0 ? ":/fonts/mscore20.xml" : ":/fonts/gonville.xml";
+      if(idx == 0)
+        path = ":/fonts/mscore20.xml";
+      else if(idx == 1)
+        path = ":/fonts/gonville.xml";
+      else if(idx == 2)
+        path = ":/fonts/Parnassus.xml";
 #endif
       QFile f(path);
       if (!f.open(QFile::ReadOnly)) {
@@ -631,7 +639,11 @@ void initSymbols(int idx)
             }
       f.close();
       docName = f.fileName();
-      int fid = idx == 0 ? 0 : 3;
+      int fid = 0;
+      if(idx == 1) //Gonville
+            fid = 3;
+      else if (idx == 2) // Parnassus
+            fid = 4;
       for (QDomElement e = doc.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "museScore") {
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull();  ee = ee.nextSiblingElement()) {

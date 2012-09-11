@@ -137,6 +137,7 @@ void MScore::init()
             "FreeSerifMscore.ttf",
             "FreeSerifBold.ttf",
             "gonville-20.otf",
+            "Parnassus.otf",
             "mscoreTab.ttf",
             "mscore-BC.ttf"
             };
